@@ -7,7 +7,7 @@ function Enemy() {
     this.speed = 5 * (Math.floor(Math.random() * 3) + 1);
     // position initailly try default for visual start point,
     // then apply random math for which row it starts on
-    this.x = 0;
+    this.x = -100;
     this.y = (Math.floor(Math.random() * 3)) * 83 + 63;
 };
 
@@ -28,7 +28,7 @@ Enemy.prototype.update = function(dt) {
     // If the Enemy runs off the page, replace with a new random Enemy
     if (this.x > 550) {
         this.speed = 5 * (Math.floor(Math.random() * 3) + 1);
-        this.x = 0;
+        this.x = -100;
         this.y = (Math.floor(Math.random() * 3)) * 83 + 63;
     }
 };
@@ -50,7 +50,7 @@ Enemy.prototype.render = function() {
 let enemyA = new Enemy();
 let enemyB = new Enemy();
 let enemyC = new Enemy();
-let allEnemies = [enemyA];
+let allEnemies = [enemyA, enemyB, enemyC];
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
