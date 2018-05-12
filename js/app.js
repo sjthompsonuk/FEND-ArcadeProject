@@ -7,8 +7,10 @@ function Enemy() {
     this.speed = 5 * (Math.floor(Math.random() * 3) + 1);
     // position initailly try default for visual start point,
     // then apply random math for which row it starts on
+    //Beware lanes work decreasing up!!!
     this.x = -100;
-    this.y = (Math.floor(Math.random() * 3)) * 83 + 63;
+    this.lane = (Math.floor(Math.random() * 3)) + 1;
+    this.y = this.lane * 83 - 20;
 };
 
 // The image/sprite for our enemies, this uses
@@ -26,10 +28,18 @@ Enemy.prototype.update = function(dt) {
     this.x = this.x + this.speed * dt * 20;
 
     // If the Enemy runs off the page, replace with a new random Enemy
+    //Beware lanes work decreasing up!!!
     if (this.x > 550) {
         this.speed = 5 * (Math.floor(Math.random() * 3) + 1);
         this.x = -100;
-        this.y = (Math.floor(Math.random() * 3)) * 83 + 63;
+        this.lane = (Math.floor(Math.random() * 3)) + 1;
+        this.y = this.lane * 83 - 20;
+    }
+
+    // Implement collisions check there
+
+    if ((this.lane == player.lane) && (this.x > (player.x) - 70) && (this.x < (player.x + 50))) {
+        alert('A collision has occured');
     }
 };
 
@@ -41,9 +51,12 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method - keystrokes...if 'left' etc etc
+
+//Beware lanes work decreasing up!!!
 function Player() {
     this.x = 202;
     this.y = 400;
+    this.lane = 5;
 }
 
 Player.prototype.sprite = 'images/char-boy.png';
@@ -58,6 +71,7 @@ Player.prototype.render = function() {
 Player.prototype.update = function() {};
 
 // What to do for each valid key...
+//Beware lanes work decreasing up!!!
 Player.prototype.handleInput = function(direction) {
     if ((direction == 'left') && (this.x != 0)) {
         this.x -= 101;
@@ -65,11 +79,12 @@ Player.prototype.handleInput = function(direction) {
         this.x += 101;
     } else if ((direction == 'up') && (this.y != -15)) {
         this.y -= 83;
+        this.lane -= 1;
     } else if ((direction == 'down') && (this.y != 400)) {
         this.y += 83;
+        this.lane += 1;
     }
 };
-
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
