@@ -2,10 +2,17 @@
 var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
+
+    // move this to prototype
     this.sprite = 'images/enemy-bug.png';
+    //
+    this.speed = xxxx;
+    // position initailly
+    this.x = xxxx;
+    this.y = xxxx;
+
 };
 
 // Update the enemy's position, required method for game
@@ -14,6 +21,8 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+
+    //Involve the speed component to update location
 };
 
 // Draw the enemy on the screen, required method for game
@@ -23,7 +32,7 @@ Enemy.prototype.render = function() {
 
 // Now write your own player class
 // This class requires an update(), render() and
-// a handleInput() method.
+// a handleInput() method - keystrokes...if 'left' etc etc
 
 
 // Now instantiate your objects.
