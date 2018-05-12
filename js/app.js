@@ -54,10 +54,21 @@ Player.prototype.render = function() {
 };
 
 // Update character
+
 Player.prototype.update = function() {};
 
 // What to do for each valid key...
-Player.prototype.handleInput = function() {};
+Player.prototype.handleInput = function(direction) {
+    if ((direction == 'left') && (this.x != 0)) {
+        this.x -= 101;
+    } else if ((direction == 'right') && (this.x != 404)) {
+        this.x += 101;
+    } else if ((direction == 'up') && (this.y != -15)) {
+        this.y -= 83;
+    } else if ((direction == 'down') && (this.y != 400)) {
+        this.y += 83;
+    }
+};
 
 
 // Now instantiate your objects.
