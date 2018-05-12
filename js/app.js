@@ -2,11 +2,13 @@
 function Enemy() {
     // Variables applied to each of our instances go here.
     // Random speed setting 1, 2, or 3.
-    this.speed = Math.floor(Math.random() * 3);
+    // Initial number in the calculation is the multiple of the speed differential
+    // Ie '5' gives 5, 10, 15 times the speed set later.
+    this.speed = 5 * (Math.floor(Math.random() * 3) + 1);
     // position initailly try default for visual start point,
     // then apply random math for which row it starts on
     this.x = 0;
-    this.y = 100;
+    this.y = (Math.floor(Math.random() * 3)) * 83 + 63;
 };
 
 // The image/sprite for our enemies, this uses
@@ -20,7 +22,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-
+    this.x = this.x + this.speed * dt * 20;
     //Involve the speed component to update location
 };
 
