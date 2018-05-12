@@ -41,6 +41,23 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method - keystrokes...if 'left' etc etc
+function Player() {
+    this.x = 202;
+    this.y = 400;
+}
+
+Player.prototype.sprite = 'images/char-boy.png';
+
+// Draw the character
+Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+// Update character
+Player.prototype.update = function() {};
+
+// What to do for each valid key...
+Player.prototype.handleInput = function() {};
 
 
 // Now instantiate your objects.
@@ -51,6 +68,8 @@ let enemyA = new Enemy();
 let enemyB = new Enemy();
 let enemyC = new Enemy();
 let allEnemies = [enemyA, enemyB, enemyC];
+
+let player = new Player();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
