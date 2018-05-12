@@ -1,20 +1,19 @@
 // Enemies our player must avoid
-var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-
-    // move this to prototype
-    this.sprite = 'images/enemy-bug.png';
-    //
-    this.speed = xxxx;
-    // position initailly
-    this.x = xxxx;
-    this.y = xxxx;
-
+function Enemy() {
+    // Variables applied to each of our instances go here.
+    // Random speed setting 1, 2, or 3.
+    this.speed = Math.floor(Math.random() * 3);
+    // position initailly try default for visual start point,
+    // then apply random math for which row it starts on
+    this.x = 0;
+    this.y = 100;
 };
 
+// The image/sprite for our enemies, this uses
+// a helper we've provided to easily load images
+// Now a prototype property
+
+Enemy.prototype.sprite = 'images/enemy-bug.png';
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
@@ -38,8 +37,11 @@ Enemy.prototype.render = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-
-
+// Start with 1, then add 2 more...
+let enemyA = new Enemy();
+let enemyB = new Enemy();
+let enemyC = new Enemy();
+let allEnemies = [enemyA];
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
