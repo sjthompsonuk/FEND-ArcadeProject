@@ -149,13 +149,20 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
+
+      /* Loop through all of the objects within the allItems array and call
+       * the render function you have defined.
+       */
+        allItems.forEach(function(item) {
+             item.render();
+        });
+
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
         player.render();
     }
 
@@ -186,7 +193,9 @@ var Engine = (function(global) {
         'images/char-princess-girl.png',
         'images/char-pink-girl.png',
         'images/selector.png',
-        'images/Gem Orange.png'
+        'images/Gem Orange.png',
+        'images/Gem Blue.png',
+        'images/Gem Green.png'
     ]);
     Resources.onReady(init);
 

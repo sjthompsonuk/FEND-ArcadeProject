@@ -6,7 +6,12 @@ let scoreboardLives = document.querySelector('.lives');
 let scoreboardScore = document.querySelector('.score');
 
 //Item count vriables
-let gemCount = 0;
+let counts = {
+    gem: 0,
+    heart: 0,
+    key: 0,
+    rock: 0
+};
 
 // Enemies our player must avoid
 function Enemy() {
@@ -112,13 +117,15 @@ Player.prototype.update = function() {
             player.y = 400;
             player.pause = false;
         }, 500)
-        scoreboardWins.textContent = this.wins;
-        scoreboardScore.textContent = this.score;
-        if (this.wins % 4 == 0) {
-            if (gemCount < 3) {
-                addGem();
+        if (this.wins % 2 == 0) {
+            if (counts.gem < 3) {
+                addItem(Gem);
+                counts.gem += 1;
             }
         };
+        scoreboardWins.textContent = this.wins;
+        scoreboardScore.textContent = this.score;
+        scoreboardGems.textContent = counts.gem;
     };
 
     // Manage collision with rock
@@ -219,31 +226,52 @@ const gameOver = function() {
 
 // Programme addition of items  - key, rock, gem, heart
 
-let allGems = [];
+let allItems = [];
 
-function addGem() {
+function addItem(itemType) {
     // Player will be back at start, so just need to check for existing gems
     // If too many of a type, don't add. max 3 gems
     // Attempt to create and place item. If one already there, reattempt till successful.
-    let newGem = new Gem();
-    // Run a loop on allGems array to see if newGems co-ordinates match any there.
-    // If not add the newGem to array. Else create a new Gem.
-    let gemClash = false;
-    allGems.forEach(function(element) {
-        if ((element.x == newGem.x) && (element.y == newGem.y)) {
-            gemClash = true;
+    let newItem = new itemType();
+    // Run a loop on allItems array to see if newItems co-ordinates match any there.
+    // If not add the newItems to array. Else create a new Gem.
+    let itemClash = false;
+    allItems.forEach(function(element) {
+        if ((element.x == newItem.x) && (element.y == newItem.y)) {
+            itemClash = true;
         }
     })
-    if (gemClash == false) {
-        allGems.push(newGem);
+    if (itemClash == false) {
+        allItems.push(newItem);
     } else {
-        addGem();
+        addItem(itemType);
     }
 };
 
-function Gem() {
-    // Allocate an orange gem object to a random place on the road.
-    this.y = 400 - ((Math.floor(Math.random() * 3) + 2) * 83);
-    this.x = (Math.floor(Math.random() * 5)) * 101;
-    this.sprite = 'images/Gem Orange.png';
+class Item {
+    constructor() {
+      // Allocate an object to a random place on the road.
+        this.y = 400 - ((Math.floor(Math.random() * 3) + 2) * 83);
+        this.x = (Math.floor(Math.random() * 5)) * 101;
+        this.render = function() {
+            ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        }
+    }
+};
+
+class Gem extends Item {
+    constructor() {
+        super();
+        let randomOfThree = Math.floor(Math.random() * 3)
+        switch (randomOfThree) {
+            case 0:
+                this.sprite = 'images/Gem Orange.png'
+                break
+            case 1:
+                this.sprite = 'images/Gem Blue.png'
+                break;
+            case 2:
+                this.sprite = 'images/Gem Green.png';
+        }
+    }
 };
