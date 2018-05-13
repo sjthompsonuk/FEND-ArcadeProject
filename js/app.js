@@ -61,8 +61,8 @@ function Player() {
     this.wins = 0;
     this.collision = false;
 }
-
-Player.prototype.sprite = 'images/char-boy.png';
+//Introduce property to allow keyboard functionality to pause
+Player.prototype.pause = false;
 
 // Draw the character
 Player.prototype.render = function() {
@@ -73,28 +73,83 @@ Player.prototype.render = function() {
 
 Player.prototype.update = function() {
     if (this.lane == 0) {
-        this.wins += 1;
-        alert(`${this.wins} wins!`);
-        this.x = 202;
-        this.y = 400;
         this.lane = 5;
+        this.wins += 1;
+        this.pause = true;
+        setTimeout(function() {
+            alert(`${player.wins} wins!`);
+            player.x = 202;
+            player.y = 400;
+            player.pause = false;
+        }, 500)
     }
+};
+
+// Begin state player rednering to select character.
+
+function BeginPlayer() {
+    this.sprite1 = {image: 'images/char-boy.png', x: 202, y: 400};
+    this.sprite2 = {image: 'images/char-cat-girl.png', x: 101, y: 400};
+    this.sprite3 = {image: 'images/char-horn-girl.png', x: 0, y: 400};
+    this.sprite4 = {image: 'images/char-princess-girl.png', x: 303, y: 400};
+    this.sprite5 = {image: 'images/char-pink-girl.png', x: 404, y: 400};
+    this.sprite6 = {image: 'images/selector.png', x: 202, y: 400};
+};
+
+BeginPlayer.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite6.image), this.sprite6.x, this.sprite6.y);
+    ctx.drawImage(Resources.get(this.sprite1.image), this.sprite1.x, this.sprite1.y);
+    ctx.drawImage(Resources.get(this.sprite2.image), this.sprite2.x, this.sprite2.y);
+    ctx.drawImage(Resources.get(this.sprite3.image), this.sprite3.x, this.sprite3.y);
+    ctx.drawImage(Resources.get(this.sprite4.image), this.sprite4.x, this.sprite4.y);
+    ctx.drawImage(Resources.get(this.sprite5.image), this.sprite5.x, this.sprite5.y);
+};
+
+BeginPlayer.prototype.update = function() {};
+
+BeginPlayer.prototype.handleInput = function(direction) {
+    if ((direction == 'left') && (this.sprite6.x != 0)) {
+        this.sprite6.x -= 101;
+    } else if ((direction == 'right') && (this.sprite6.x != 404)) {
+        this.sprite6.x += 101;
+    } else if ((direction == 'up') || (direction == 'down')) {
+        // Find which character the selctor is sitting on
+        var nextSprite;
+        if (this.sprite6.x == 0) {
+            nextSprite = this.sprite3.image;
+        } else if (this.sprite6.x == 101) {
+            nextSprite = this.sprite2.image;
+        } else if (this.sprite6.x == 202) {
+            nextSprite = this.sprite1.image;
+        } else if (this.sprite6.x == 303) {
+            nextSprite = this.sprite4.image;
+        } else if (this.sprite6.x == 404) {
+            nextSprite = this.sprite5.image;
+        };
+        // create new player with correct sprite
+        player = new Player();
+        player.sprite = nextSprite;
+        // populate Enemies
+        allEnemies = [enemyA, enemyB, enemyC];
+    };
 };
 
 // What to do for each valid key...
 //Beware lanes work decreasing up!!!
 Player.prototype.handleInput = function(direction) {
-    if ((direction == 'left') && (this.x != 0)) {
-        this.x -= 101;
-    } else if ((direction == 'right') && (this.x != 404)) {
-        this.x += 101;
-    } else if ((direction == 'up') && (this.y != -15)) {
-        this.y -= 83;
-        this.lane -= 1;
-    } else if ((direction == 'down') && (this.y != 400)) {
-        this.y += 83;
-        this.lane += 1;
-    }
+    if (this.pause == false) {
+        if ((direction == 'left') && (this.x != 0)) {
+            this.x -= 101;
+        } else if ((direction == 'right') && (this.x != 404)) {
+            this.x += 101;
+        } else if ((direction == 'up') && (this.y != -15)) {
+            this.y -= 83;
+            this.lane -= 1;
+        } else if ((direction == 'down') && (this.y != 400)) {
+            this.y += 83;
+            this.lane += 1;
+        };
+    };
 };
 
 // Now instantiate your objects.
@@ -103,7 +158,7 @@ Player.prototype.handleInput = function(direction) {
 let enemyA = new Enemy();
 let enemyB = new Enemy();
 let enemyC = new Enemy();
-let allEnemies = [enemyA, enemyB, enemyC];
+let allEnemies = [];
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -121,12 +176,11 @@ document.addEventListener('keyup', function(e) {
 // This will be called at initialisation then every reset.
 
 const startMenu = function() {
-    alert('start menu');
-    player = new Player();
+    player = new BeginPlayer();
+    allEnemies = [];
 }
 
 // GameOver alert/modal
 const gameOver = function() {
-    alert('game over');
     startMenu();
 }
