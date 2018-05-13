@@ -58,6 +58,7 @@ function Player() {
     this.x = 202;
     this.y = 400;
     this.lane = 5;
+    this.wins = 0;
     this.collision = false;
 }
 
@@ -71,6 +72,13 @@ Player.prototype.render = function() {
 // Update character
 
 Player.prototype.update = function() {
+    if (this.lane == 0) {
+        this.wins += 1;
+        alert(`${this.wins} wins!`);
+        this.x = 202;
+        this.y = 400;
+        this.lane = 5;
+    }
 };
 
 // What to do for each valid key...
