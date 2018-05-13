@@ -1,3 +1,10 @@
+// Variables for scorebard
+
+let scoreboardWins = document.querySelector('.wins');
+let scoreboardGems = document.querySelector('.gems');
+let scoreboardLives = document.querySelector('.lives');
+let scoreboardScore = document.querySelector('.score');
+
 // Enemies our player must avoid
 function Enemy() {
     // Variables applied to each of our instances go here.
@@ -59,6 +66,7 @@ function Player() {
     this.y = 317;
     this.lane = 4;
     this.wins = 0;
+    this.score = 0;
     this.collision = false;
 }
 //Introduce property to allow keyboard functionality to pause
@@ -72,17 +80,21 @@ Player.prototype.render = function() {
 // Update character
 
 Player.prototype.update = function() {
+    // win update
     if (this.lane == 0) {
         this.lane = 5;
         this.wins += 1;
+        this.score += 100;
         this.pause = true;
         setTimeout(function() {
-            alert(`${player.wins} wins!`);
             player.x = 202;
             player.y = 400;
             player.pause = false;
         }, 500)
-    }
+        scoreboardWins.textContent = this.wins;
+        scoreboardScore.textContent = this.score;
+    };
+
 };
 
 // Begin state player rednering to select character.
