@@ -74,6 +74,8 @@ function Player() {
     this.lane = 4;
     this.wins = 0;
     this.score = 0;
+    this.gems = 0;
+    this.lives = 0;
     this.collision = false;
 }
 //Introduce property to allow keyboard functionality to pause
@@ -136,18 +138,14 @@ Player.prototype.update = function() {
         };
         scoreboardWins.textContent = this.wins;
         scoreboardScore.textContent = this.score;
-        scoreboardGems.textContent = counts.gem;
     };
 
-    // Manage collision with rock
-
-    // Manage collision with collectables
-
-    // Heart - add life
-
-    // Gem/Star - collect
-
-    // Key - destroy all rocks - turn to stars
+    // Detect and process collisions with Items
+    allItems.forEach(function(item) {
+        if ((item.x == player.x) && (item.y == player.y)) {
+            item.collision();
+        };
+    });
 };
 
 // Begin state player rednering to select character.
@@ -284,6 +282,14 @@ class Gem extends Item {
             case 2:
                 this.sprite = 'images/Gem Green.png';
         }
+        this.collision = function() {
+            player.score += 40;
+            player.gems += 1;
+            counts.gem -= 1;
+            scoreboardScore.textContent = player.score;
+            scoreboardGems.textContent = player.gems;
+            allItems.splice(allItems.indexOf(this),1);
+        };
     }
 };
 
