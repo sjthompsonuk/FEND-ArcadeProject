@@ -91,7 +91,7 @@ Player.prototype.handleInput = function(direction) {
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player - this is done by player.initiate()
+// Place the player object in a variable called player - this is done by startMenu below
 let enemyA = new Enemy();
 let enemyB = new Enemy();
 let enemyC = new Enemy();
@@ -109,3 +109,10 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+// This will be called at initialisation then every reset.
+
+const startMenu = function() {
+  alert('start menu')
+  player = new Player();
+}

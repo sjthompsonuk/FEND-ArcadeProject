@@ -79,7 +79,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        // check for collision with enemy.
         if (player.collision == true) {
             reset();
         }
@@ -165,11 +165,10 @@ var Engine = (function(global) {
      */
 
      /*
-      * Will run on start then each collision with enemy. Player will reset position via player.update()
+      * Will run on start then each collision with enemy
       */
     function reset() {
-        alert('RESET PLACEHOLDER');
-        player = new Player();
+        startMenu();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
