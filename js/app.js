@@ -80,8 +80,8 @@ Enemy.prototype.render = function() {
 //Beware lanes work decreasing up!!!
 function Player() {
     this.x = 202;
-    this.y = 317;
-    this.lane = 4;
+    this.y = 400;
+    this.lane = 5;
     this.wins = 0;
     this.score = 0;
     this.gems = 0;
