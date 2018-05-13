@@ -81,7 +81,7 @@ var Engine = (function(global) {
         updateEntities(dt);
         // check for collision with enemy.
         if (player.collision == true) {
-            reset();
+            gameOver();
         }
     }
 

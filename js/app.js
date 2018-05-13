@@ -113,6 +113,12 @@ document.addEventListener('keyup', function(e) {
 // This will be called at initialisation then every reset.
 
 const startMenu = function() {
-  alert('start menu')
-  player = new Player();
+    alert('start menu');
+    player = new Player();
+}
+
+// GameOver alert/modal
+const gameOver = function() {
+    alert('game over');
+    startMenu();
 }
