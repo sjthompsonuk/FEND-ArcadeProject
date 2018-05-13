@@ -80,6 +80,9 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         // checkCollisions();
+        if (player.collision == true) {
+            reset();
+        }
     }
 
     /* This is called by the update function and loops through all of the
@@ -160,8 +163,13 @@ var Engine = (function(global) {
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
      */
+
+     /*
+      * Will run on start then each collision with enemy. Player will reset position via player.update()
+      */
     function reset() {
-        // noop
+        alert('RESET PLACEHOLDER');
+        player = new Player();
     }
 
     /* Go ahead and load all of the images we know we're going to need to

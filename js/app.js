@@ -39,7 +39,8 @@ Enemy.prototype.update = function(dt) {
     // Implement collisions check there
 
     if ((this.lane == player.lane) && (this.x > (player.x) - 70) && (this.x < (player.x + 50))) {
-        alert('A collision has occured');
+        // change player property for collission
+        player.collision = true;
     }
 };
 
@@ -57,6 +58,7 @@ function Player() {
     this.x = 202;
     this.y = 400;
     this.lane = 5;
+    this.collision = false;
 }
 
 Player.prototype.sprite = 'images/char-boy.png';
@@ -68,7 +70,8 @@ Player.prototype.render = function() {
 
 // Update character
 
-Player.prototype.update = function() {};
+Player.prototype.update = function() {
+};
 
 // What to do for each valid key...
 //Beware lanes work decreasing up!!!
@@ -88,14 +91,11 @@ Player.prototype.handleInput = function(direction) {
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-// Start with 1, then add 2 more...
+// Place the player object in a variable called player - this is done by player.initiate()
 let enemyA = new Enemy();
 let enemyB = new Enemy();
 let enemyC = new Enemy();
 let allEnemies = [enemyA, enemyB, enemyC];
-
-let player = new Player();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
