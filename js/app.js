@@ -4,6 +4,8 @@ let scoreboardWins = document.querySelector('.wins');
 let scoreboardGems = document.querySelector('.gems');
 let scoreboardLives = document.querySelector('.lives');
 let scoreboardScore = document.querySelector('.score');
+let scoreboardTopScore = document.querySelector('.top-score');
+let topScore = 0;
 
 //Item count vriables
 let counts = {
@@ -53,8 +55,16 @@ Enemy.prototype.update = function(dt) {
     // Implement collisions check there
 
     if ((this.lane == player.lane) && (this.x > (player.x) - 70) && (this.x < (player.x + 50))) {
-        // change player property for collission
-        player.collision = true;
+        if (player.lives == 0) {
+            alert('no lives');
+            gameOver();
+        } else {
+            player.lives -= 1;
+            scoreboardLives.textContent = player.lives;
+            player.x = 202;
+            player.y = 400;
+            player.lane = 5;
+        }
     }
 };
 
@@ -76,7 +86,6 @@ function Player() {
     this.score = 0;
     this.gems = 0;
     this.lives = 0;
-    this.collision = false;
 }
 //Introduce property to allow keyboard functionality to pause
 Player.prototype.pause = false;
@@ -138,6 +147,10 @@ Player.prototype.update = function() {
         };
         scoreboardWins.textContent = this.wins;
         scoreboardScore.textContent = this.score;
+        if (this.score > topScore) {
+            topScore = this.score;
+            scoreboardTopScore.textContent = topScore;
+        }
     };
 
     // Detect and process collisions with Items
@@ -224,12 +237,24 @@ document.addEventListener('keyup', function(e) {
 // This will be called at initialisation then every reset.
 
 const startMenu = function() {
-    player = new BeginPlayer();
     allEnemies = [];
+    allItems = [];
+    counts = {
+        gem: 0,
+        heart: 0,
+        rock: 0
+    };
+    scoreboardGems.textContent = 0;
+    scoreboardWins.textContent = 0;
+    scoreboardLives.textContent = 0;
+    scoreboardScore.textContent = 0;
+    player = new BeginPlayer();
+
 }
 
 // GameOver alert/modal
 const gameOver = function() {
+    alert(`Game Over with a score of ${player.score}`);
     startMenu();
 }
 
@@ -288,6 +313,10 @@ class Gem extends Item {
             counts.gem -= 1;
             scoreboardScore.textContent = player.score;
             scoreboardGems.textContent = player.gems;
+            if (player.score > topScore) {
+                topScore = player.score;
+                scoreboardTopScore.textContent = topScore;
+            };
             allItems.splice(allItems.indexOf(this),1);
         };
     }
@@ -298,6 +327,15 @@ class Rock extends Item {
     constructor() {
         super();
         this.sprite = 'images/Rock.png';
+        this.collision = function() {
+            if (player.lives == 0) {
+                gameOver();
+            } else {
+                player.lives -= 1;
+                scoreboardLives.textContent = player.lives;
+                allItems.splice(allItems.indexOf(this),1);
+            }
+        };
     }
 };
 
@@ -305,5 +343,11 @@ class Heart extends Item {
     constructor() {
         super();
         this.sprite = 'images/Heart.png';
+        this.collision = function() {
+            player.lives += 1;
+            counts.heart -= 1;
+            scoreboardLives.textContent = player.lives;
+            allItems.splice(allItems.indexOf(this),1);
+        };
     }
 };

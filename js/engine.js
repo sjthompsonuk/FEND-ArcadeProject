@@ -79,10 +79,6 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // check for collision with enemy.
-        if (player.collision == true) {
-            gameOver();
-        }
     }
 
     /* This is called by the update function and loops through all of the
