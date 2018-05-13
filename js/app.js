@@ -9,7 +9,6 @@ let scoreboardScore = document.querySelector('.score');
 let counts = {
     gem: 0,
     heart: 0,
-    key: 0,
     rock: 0
 };
 
@@ -121,6 +120,18 @@ Player.prototype.update = function() {
             if (counts.gem < 3) {
                 addItem(Gem);
                 counts.gem += 1;
+            }
+        };
+        if (this.wins % 2 == 0) {
+            if (counts.rock < 3) {
+                addItem(Rock);
+                counts.rock += 1;
+            }
+        };
+        if (this.wins % 2 == 0) {
+            if (counts.heart < 1) {
+                addItem(Heart);
+                counts.heart = 1;
             }
         };
         scoreboardWins.textContent = this.wins;
@@ -273,5 +284,20 @@ class Gem extends Item {
             case 2:
                 this.sprite = 'images/Gem Green.png';
         }
+    }
+};
+
+
+class Rock extends Item {
+    constructor() {
+        super();
+        this.sprite = 'images/Rock.png';
+    }
+};
+
+class Heart extends Item {
+    constructor() {
+        super();
+        this.sprite = 'images/Heart.png';
     }
 };
