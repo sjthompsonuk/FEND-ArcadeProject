@@ -5,6 +5,9 @@ let scoreboardGems = document.querySelector('.gems');
 let scoreboardLives = document.querySelector('.lives');
 let scoreboardScore = document.querySelector('.score');
 
+//Item count vriables
+let gemCount = 0;
+
 // Enemies our player must avoid
 function Enemy() {
     // Variables applied to each of our instances go here.
@@ -111,19 +114,11 @@ Player.prototype.update = function() {
         }, 500)
         scoreboardWins.textContent = this.wins;
         scoreboardScore.textContent = this.score;
-        if (this.wins % 5 == 0) {
-            if (this.wins % 15 == 0) {
-                addItem(key);
-            } else {
-            addItem(rock);
+        if (this.wins % 4 == 0) {
+            if (gemCount < 3) {
+                addGem();
             }
         };
-        if (this.wins % 4 == 0) {
-            addItem(gem);
-        }
-        if (this.wins % 10 == 0) {
-            addItem(heart);
-        }
     };
 
     // Manage collision with rock
@@ -224,8 +219,31 @@ const gameOver = function() {
 
 // Programme addition of items  - key, rock, gem, heart
 
-function addItem(item) {
-    // Player will be back at start, so just need to check for existing items
-    // If too many of a type, don't add. max 3 rocks, 3 gems, 1 key, 1 heart
+let allGems = [];
+
+function addGem() {
+    // Player will be back at start, so just need to check for existing gems
+    // If too many of a type, don't add. max 3 gems
     // Attempt to create and place item. If one already there, reattempt till successful.
-}
+    let newGem = new Gem();
+    // Run a loop on allGems array to see if newGems co-ordinates match any there.
+    // If not add the newGem to array. Else create a new Gem.
+    let gemClash = false;
+    allGems.forEach(function(element) {
+        if ((element.x == newGem.x) && (element.y == newGem.y)) {
+            gemClash = true;
+        }
+    })
+    if (gemClash == false) {
+        allGems.push(newGem);
+    } else {
+        addGem();
+    }
+};
+
+function Gem() {
+    // Allocate an orange gem object to a random place on the road.
+    this.y = 400 - ((Math.floor(Math.random() * 3) + 2) * 83);
+    this.x = (Math.floor(Math.random() * 5)) * 101;
+    this.sprite = 'images/Gem Orange.png';
+};
