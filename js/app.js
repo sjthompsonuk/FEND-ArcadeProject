@@ -56,8 +56,8 @@ Enemy.prototype.render = function() {
 //Beware lanes work decreasing up!!!
 function Player() {
     this.x = 202;
-    this.y = 400;
-    this.lane = 5;
+    this.y = 317;
+    this.lane = 4;
     this.wins = 0;
     this.collision = false;
 }
@@ -112,23 +112,25 @@ BeginPlayer.prototype.handleInput = function(direction) {
         this.sprite6.x -= 101;
     } else if ((direction == 'right') && (this.sprite6.x != 404)) {
         this.sprite6.x += 101;
-    } else if ((direction == 'up') || (direction == 'down')) {
+    } else if (direction == 'up') {
         // Find which character the selctor is sitting on
-        var nextSprite;
+        let nextSprite = {sprite: '', x: 0};
         if (this.sprite6.x == 0) {
-            nextSprite = this.sprite3.image;
+            nextSprite.sprite = this.sprite3.image;
         } else if (this.sprite6.x == 101) {
-            nextSprite = this.sprite2.image;
+            nextSprite.sprite = this.sprite2.image;
         } else if (this.sprite6.x == 202) {
-            nextSprite = this.sprite1.image;
+            nextSprite.sprite = this.sprite1.image;
         } else if (this.sprite6.x == 303) {
-            nextSprite = this.sprite4.image;
+            nextSprite.sprite = this.sprite4.image;
         } else if (this.sprite6.x == 404) {
-            nextSprite = this.sprite5.image;
+            nextSprite.sprite = this.sprite5.image;
         };
+        nextSprite.x = this.sprite6.x;
         // create new player with correct sprite
         player = new Player();
-        player.sprite = nextSprite;
+        player.sprite = nextSprite.sprite;
+        player.x = nextSprite.x;
         // populate Enemies
         allEnemies = [enemyA, enemyB, enemyC];
     };
