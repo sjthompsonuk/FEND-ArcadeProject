@@ -77,10 +77,28 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+// What to do for each valid key...
+//Beware lanes work decreasing up!!!
+Player.prototype.handleInput = function(direction) {
+    if (this.pause == false) {
+        if ((direction == 'left') && (this.x != 0)) {
+            this.x -= 101;
+        } else if ((direction == 'right') && (this.x != 404)) {
+            this.x += 101;
+        } else if ((direction == 'up') && (this.y != -15)) {
+            this.y -= 83;
+            this.lane -= 1;
+        } else if ((direction == 'down') && (this.y != 400)) {
+            this.y += 83;
+            this.lane += 1;
+        };
+    };
+};
+
 // Update character
 
 Player.prototype.update = function() {
-    // win update
+    // win update adjust scores, pause, and add new items
     if (this.lane == 0) {
         this.lane = 5;
         this.wins += 1;
@@ -93,8 +111,30 @@ Player.prototype.update = function() {
         }, 500)
         scoreboardWins.textContent = this.wins;
         scoreboardScore.textContent = this.score;
+        if (this.wins % 5 == 0) {
+            if (this.wins % 15 == 0) {
+                addItem(key);
+            } else {
+            addItem(rock);
+            }
+        };
+        if (this.wins % 4 == 0) {
+            addItem(gem);
+        }
+        if (this.wins % 10 == 0) {
+            addItem(heart);
+        }
     };
 
+    // Manage collision with rock
+
+    // Manage collision with collectables
+
+    // Heart - add life
+
+    // Gem/Star - collect
+
+    // Key - destroy all rocks - turn to stars
 };
 
 // Begin state player rednering to select character.
@@ -148,23 +188,6 @@ BeginPlayer.prototype.handleInput = function(direction) {
     };
 };
 
-// What to do for each valid key...
-//Beware lanes work decreasing up!!!
-Player.prototype.handleInput = function(direction) {
-    if (this.pause == false) {
-        if ((direction == 'left') && (this.x != 0)) {
-            this.x -= 101;
-        } else if ((direction == 'right') && (this.x != 404)) {
-            this.x += 101;
-        } else if ((direction == 'up') && (this.y != -15)) {
-            this.y -= 83;
-            this.lane -= 1;
-        } else if ((direction == 'down') && (this.y != 400)) {
-            this.y += 83;
-            this.lane += 1;
-        };
-    };
-};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -197,4 +220,12 @@ const startMenu = function() {
 // GameOver alert/modal
 const gameOver = function() {
     startMenu();
+}
+
+// Programme addition of items  - key, rock, gem, heart
+
+function addItem(item) {
+    // Player will be back at start, so just need to check for existing items
+    // If too many of a type, don't add. max 3 rocks, 3 gems, 1 key, 1 heart
+    // Attempt to create and place item. If one already there, reattempt till successful.
 }
