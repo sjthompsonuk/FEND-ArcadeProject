@@ -2,7 +2,7 @@ body {
     text-align: center;
     font-family: 'Bangers', cursive;
 }
-
+/* Move the scores nearer to top of game area*/
 .scoreboard {
     font-size: 22px;
     position: relative;
@@ -12,7 +12,7 @@ body {
 div > span {
     margin: 0 10px;
 }
-
+/* Initial set to hidden, centralised over game area. Modifies by JS*/
 .game-over {
     display: none;
     position: absolute;;

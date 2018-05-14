@@ -13,6 +13,13 @@
  * writing app.js a little simpler to work with.
  */
 
+ /*
+    This file has been modified slightly:
+    - No collision detection here (done in app.js)
+    - Rendering includes allItems array.
+    - Additional resource .png files loaded.
+ */
+
 var Engine = (function(global) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
@@ -77,6 +84,10 @@ var Engine = (function(global) {
      * functionality this way (you could just implement collision detection
      * on the entities themselves within your app.js file).
      */
+
+     /*
+      * Collision detected is implemented in app.js instead.
+     */
     function update(dt) {
         updateEntities(dt);
     }
@@ -118,7 +129,7 @@ var Engine = (function(global) {
             row, col;
 
         // Before drawing, clear existing canvas
-        ctx.clearRect(0,0,canvas.width,canvas.height)
+        ctx.clearRect(0,0,canvas.width,canvas.height);
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
@@ -148,6 +159,7 @@ var Engine = (function(global) {
 
       /* Loop through all of the objects within the allItems array and call
        * the render function you have defined.
+       * This covers rocks, gems and hearts.
        */
         allItems.forEach(function(item) {
              item.render();
@@ -168,7 +180,8 @@ var Engine = (function(global) {
      */
 
      /*
-      * Will run on start then each collision with enemy
+      * Will run on each game initialisation, sends to the startMenu function define in app.js
+      * This allows the game to stop and a new character to be selected, before game continues.
       */
     function reset() {
         startMenu();
@@ -177,6 +190,10 @@ var Engine = (function(global) {
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
      * all of these images are properly loaded our game will start.
+     */
+
+     /*
+       Additional .png resources added: extra characters, selector, gems, rocks and hearts.
      */
     Resources.load([
         'images/stone-block.png',

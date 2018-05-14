@@ -19,7 +19,7 @@ score the highest possible score.
 When in the new game screen, you will have the choice of 5 different characters.
 
 * The left and right arrow keys move the selector between characters.
-* The up and down arrow keys confirm character selection and start the game.
+* The up arrow key confirms character selection and start the game.
 
 ### In Game Controls
 
@@ -34,7 +34,7 @@ When in the new game screen, you will have the choice of 5 different characters.
 
 * Game scores and running totals of lives and gems is displayed on screen.
 * On Gameover a score is displayed.
-* If a topscore occurs, this will be recorded on screen also. 
+* If a topscore occurs, this will be recorded on screen also.
 
 ================================================================================
 ## Game Play

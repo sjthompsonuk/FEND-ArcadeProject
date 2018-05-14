@@ -1,4 +1,4 @@
-// Variables for scorebard
+// Variable declarations
 
 let scoreboardWins = document.querySelector('.wins');
 let scoreboardGems = document.querySelector('.gems');
@@ -11,7 +11,7 @@ let topScore = 0;
 let speedMultiple = 1;
 let gameOverStatus = false;
 
-//Item count vriables
+//Item counts
 let counts = {
     gem: 0,
     heart: 0,
@@ -25,9 +25,9 @@ function Enemy() {
     // Initial number in the calculation is the multiple of the speed differential
     // Ie '5' gives 5, 10, 15 times the speed set later.
     this.speed = 5 * (Math.floor(Math.random() * 3) + 1);
-    // position initailly try default for visual start point,
+    // position initailly to left of game,
     // then apply random math for which row it starts on
-    //Beware lanes work decreasing up!!!
+    // Beware lanes work decreasing up!!!
     this.x = -100;
     this.lane = (Math.floor(Math.random() * 3)) + 1;
     this.y = this.lane * 83 - 20;
@@ -49,6 +49,7 @@ Enemy.prototype.update = function(dt) {
 
     // If the Enemy runs off the page, replace with a new random Enemy
     //Beware lanes work decreasing up!!!
+    // Speed multiplier comes into effect after a certain number of 'wins'.
     if (this.x > 550) {
         this.speed = speedMultiple * 5 * (Math.floor(Math.random() * 3) + 1);
         this.x = -100;
@@ -56,9 +57,11 @@ Enemy.prototype.update = function(dt) {
         this.y = this.lane * 83 - 20;
     }
 
-    // Implement collisions check there
+    // Implement collisions check here
 
     if ((this.lane == player.lane) && (this.x > (player.x) - 70) && (this.x < (player.x + 50))) {
+
+        // Logic regarding lives left
         if (player.lives == 0) {
             gameOver();
         } else {
@@ -81,6 +84,8 @@ Enemy.prototype.render = function() {
 // a handleInput() method - keystrokes...if 'left' etc etc
 
 //Beware lanes work decreasing up!!!
+// Should be initiated after player selection from BeginPlayer objects.
+// Position central bottom of board
 function Player() {
     this.x = 202;
     this.y = 400;
@@ -90,7 +95,7 @@ function Player() {
     this.gems = 0;
     this.lives = 0;
 }
-//Introduce property to allow keyboard functionality to pause
+//Introduce property to allow normal keyboard functionality to pause during startMenu
 Player.prototype.pause = false;
 
 // Draw the character
@@ -100,6 +105,7 @@ Player.prototype.render = function() {
 
 // What to do for each valid key...
 //Beware lanes work decreasing up!!!
+//include check for not moving off the board
 Player.prototype.handleInput = function(direction) {
     if (this.pause == false) {
         if ((direction == 'left') && (this.x != 0)) {
@@ -131,7 +137,7 @@ Player.prototype.update = function() {
             player.pause = false;
         }, 500)
         if (this.wins % 2 == 0) {
-            if (counts.gem < 3) {
+            if (counts.gem < 2) {
                 addItem(Gem);
                 counts.gem += 1;
             }
@@ -151,6 +157,8 @@ Player.prototype.update = function() {
         if (this.wins % 10 == 0) {
             speedMultiple = speedMultiple * 1.3;
         };
+
+        // update scoreboard
         scoreboardWins.textContent = this.wins;
         scoreboardScore.textContent = this.score;
         if (this.score > topScore) {
@@ -167,7 +175,7 @@ Player.prototype.update = function() {
     });
 };
 
-// Begin state player rednering to select character.
+// Begin state player rendering to select character.
 
 function BeginPlayer() {
     this.sprite1 = {image: 'images/char-boy.png', x: 202, y: 400};
@@ -178,6 +186,7 @@ function BeginPlayer() {
     this.sprite6 = {image: 'images/selector.png', x: 202, y: 400};
 };
 
+// Effectively a start menu of characters
 BeginPlayer.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite6.image), this.sprite6.x, this.sprite6.y);
     ctx.drawImage(Resources.get(this.sprite1.image), this.sprite1.x, this.sprite1.y);
@@ -186,22 +195,27 @@ BeginPlayer.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite4.image), this.sprite4.x, this.sprite4.y);
     ctx.drawImage(Resources.get(this.sprite5.image), this.sprite5.x, this.sprite5.y);
 };
-
+// Blank function to avoid errors when update is trying to call player.update()
+// Alternative was an instanceof check in the update file, but this is more economical.
 BeginPlayer.prototype.update = function() {};
 
+// Function for dealing with possible keystrokes prior to character selection
 BeginPlayer.prototype.handleInput = function(direction) {
+    // If we're sitting on the GameOver modal, only pressing enter to clear modala is valid.
     if (gameOverStatus == true) {
         if (direction == 'enter') {
             gameOverStatus = false;
             gameOverModal.style.display = 'none';
         };
     } else {
+        // Only allow direction keys to change and select character.
         if ((direction == 'left') && (this.sprite6.x != 0)) {
             this.sprite6.x -= 101;
         } else if ((direction == 'right') && (this.sprite6.x != 404)) {
             this.sprite6.x += 101;
         } else if (direction == 'up') {
             // Find which character the selctor is sitting on
+            // set the nextSprite sprite value to appropriate character
             let nextSprite = {sprite: '', x: 0};
             if (this.sprite6.x == 0) {
                 nextSprite.sprite = this.sprite3.image;
@@ -215,11 +229,12 @@ BeginPlayer.prototype.handleInput = function(direction) {
                 nextSprite.sprite = this.sprite5.image;
             };
             nextSprite.x = this.sprite6.x;
-            // create new player with correct sprite
+            // create new player with correct sprite character
             player = new Player();
             player.sprite = nextSprite.sprite;
             player.x = nextSprite.x;
             // populate Enemies
+            // also ensures after a restart, the enemies start from left of screen
             let enemyA = new Enemy();
             let enemyB = new Enemy();
             let enemyC = new Enemy();
@@ -230,6 +245,7 @@ BeginPlayer.prototype.handleInput = function(direction) {
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
+// Has been modified to add 'Enter' key.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
@@ -243,19 +259,22 @@ document.addEventListener('keyup', function(e) {
 });
 
 // This will be called at initialisation then every reset.
-
+// Clears all enemies and items
 const startMenu = function() {
     allEnemies = [];
     allItems = [];
+    // adjust counts
     counts = {
         gem: 0,
         heart: 0,
         rock: 0
     };
+    // Clear scores other than topscore
     scoreboardGems.textContent = 0;
     scoreboardWins.textContent = 0;
     scoreboardLives.textContent = 0;
     scoreboardScore.textContent = 0;
+    // Go back to the player selection menu
     player = new BeginPlayer();
 
 }
@@ -265,7 +284,8 @@ const gameOver = function() {
     gameOverScore.textContent = player.score;
     gameOverModal.style.display = 'block';
     gameOverStatus = true;
-    // The BeginPlayer handler will listen for 'Enter' and not allow character selection until tht key is pressed.
+    // The BeginPlayer handler will listen for 'Enter' and not allow
+    // character selection until tht key is pressed.
     startMenu();
 }
 
@@ -275,19 +295,23 @@ let allItems = [];
 
 function addItem(itemType) {
     // Player will be back at start, so just need to check for existing gems
-    // If too many of a type, don't add. max 3 gems
+    // If too many of a type, don't add. max 2 gems etc
     // Attempt to create and place item. If one already there, reattempt till successful.
     let newItem = new itemType();
-    // Run a loop on allItems array to see if newItems co-ordinates match any there.
-    // If not add the newItems to array. Else create a new Gem.
+
+    // Run a loop on allItems array to see if newItems co-ordinates clash with any there.
     let itemClash = false;
     allItems.forEach(function(element) {
+
+        // If no clash add the newItems to array.
         if ((element.x == newItem.x) && (element.y == newItem.y)) {
             itemClash = true;
         }
     })
     if (itemClash == false) {
         allItems.push(newItem);
+
+    //Else restart the function.
     } else {
         addItem(itemType);
     }
@@ -304,9 +328,11 @@ class Item {
     }
 };
 
+// Specifics for Gems
 class Gem extends Item {
     constructor() {
         super();
+        // Random colour choice
         let randomOfThree = Math.floor(Math.random() * 3)
         switch (randomOfThree) {
             case 0:
@@ -318,7 +344,10 @@ class Gem extends Item {
             case 2:
                 this.sprite = 'images/Gem Green.png';
         }
+
+        //If gems collected
         this.collision = function() {
+            //update counts and scoreboards
             player.score += 40;
             player.gems += 1;
             counts.gem -= 1;
@@ -328,16 +357,20 @@ class Gem extends Item {
                 topScore = player.score;
                 scoreboardTopScore.textContent = topScore;
             };
+
+            //remove gem
             allItems.splice(allItems.indexOf(this),1);
         };
     }
 };
 
-
+//Rock specifics
 class Rock extends Item {
     constructor() {
         super();
         this.sprite = 'images/Rock.png';
+
+        //handle collisions, either gameover or lose life and remove rock
         this.collision = function() {
             if (player.lives == 0) {
                 gameOver();
@@ -351,10 +384,13 @@ class Rock extends Item {
     }
 };
 
+//Heart specifics
 class Heart extends Item {
     constructor() {
         super();
         this.sprite = 'images/Heart.png';
+
+        // handle collisions - gain life and remove heart
         this.collision = function() {
             player.lives += 1;
             counts.heart -= 1;
