@@ -26,3 +26,7 @@ div > span {
     border: 20px double green;
     font-size: 30px;
 }
+
+.readme {
+    font-size:  20px;
+}
