@@ -134,12 +134,12 @@ Player.prototype.update = function() {
             }
         };
         if (this.wins % 3 == 0) {
-            if (counts.rock < 3) {
+            if (counts.rock < 4) {
                 addItem(Rock);
                 counts.rock += 1;
             }
         };
-        if (this.wins % 7 == 0) {
+        if (this.wins % 9 == 0) {
             if (counts.heart < 1) {
                 addItem(Heart);
                 counts.heart = 1;
@@ -334,6 +334,7 @@ class Rock extends Item {
                 player.lives -= 1;
                 scoreboardLives.textContent = player.lives;
                 allItems.splice(allItems.indexOf(this),1);
+                counts.rock -= 1;
             }
         };
     }
