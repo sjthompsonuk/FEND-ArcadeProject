@@ -5,8 +5,11 @@ let scoreboardGems = document.querySelector('.gems');
 let scoreboardLives = document.querySelector('.lives');
 let scoreboardScore = document.querySelector('.score');
 let scoreboardTopScore = document.querySelector('.top-score');
+let gameOverScore = document.querySelector('.game-over-score');
+let gameOverModal = document.querySelector('.game-over');
 let topScore = 0;
 let speedMultiple = 1;
+let gameOverStatus = false;
 
 //Item count vriables
 let counts = {
@@ -57,7 +60,6 @@ Enemy.prototype.update = function(dt) {
 
     if ((this.lane == player.lane) && (this.x > (player.x) - 70) && (this.x < (player.x + 50))) {
         if (player.lives == 0) {
-            alert('no lives');
             gameOver();
         } else {
             player.lives -= 1;
@@ -188,35 +190,42 @@ BeginPlayer.prototype.render = function() {
 BeginPlayer.prototype.update = function() {};
 
 BeginPlayer.prototype.handleInput = function(direction) {
-    if ((direction == 'left') && (this.sprite6.x != 0)) {
-        this.sprite6.x -= 101;
-    } else if ((direction == 'right') && (this.sprite6.x != 404)) {
-        this.sprite6.x += 101;
-    } else if (direction == 'up') {
-        // Find which character the selctor is sitting on
-        let nextSprite = {sprite: '', x: 0};
-        if (this.sprite6.x == 0) {
-            nextSprite.sprite = this.sprite3.image;
-        } else if (this.sprite6.x == 101) {
-            nextSprite.sprite = this.sprite2.image;
-        } else if (this.sprite6.x == 202) {
-            nextSprite.sprite = this.sprite1.image;
-        } else if (this.sprite6.x == 303) {
-            nextSprite.sprite = this.sprite4.image;
-        } else if (this.sprite6.x == 404) {
-            nextSprite.sprite = this.sprite5.image;
+    if (gameOverStatus == true) {
+        if (direction == 'enter') {
+            gameOverStatus = false;
+            gameOverModal.style.display = 'none';
         };
-        nextSprite.x = this.sprite6.x;
-        // create new player with correct sprite
-        player = new Player();
-        player.sprite = nextSprite.sprite;
-        player.x = nextSprite.x;
-        // populate Enemies
-        let enemyA = new Enemy();
-        let enemyB = new Enemy();
-        let enemyC = new Enemy();
-        allEnemies = [enemyA, enemyB, enemyC];
-    };
+    } else {
+        if ((direction == 'left') && (this.sprite6.x != 0)) {
+            this.sprite6.x -= 101;
+        } else if ((direction == 'right') && (this.sprite6.x != 404)) {
+            this.sprite6.x += 101;
+        } else if (direction == 'up') {
+            // Find which character the selctor is sitting on
+            let nextSprite = {sprite: '', x: 0};
+            if (this.sprite6.x == 0) {
+                nextSprite.sprite = this.sprite3.image;
+            } else if (this.sprite6.x == 101) {
+                nextSprite.sprite = this.sprite2.image;
+            } else if (this.sprite6.x == 202) {
+                nextSprite.sprite = this.sprite1.image;
+            } else if (this.sprite6.x == 303) {
+                nextSprite.sprite = this.sprite4.image;
+            } else if (this.sprite6.x == 404) {
+                nextSprite.sprite = this.sprite5.image;
+            };
+            nextSprite.x = this.sprite6.x;
+            // create new player with correct sprite
+            player = new Player();
+            player.sprite = nextSprite.sprite;
+            player.x = nextSprite.x;
+            // populate Enemies
+            let enemyA = new Enemy();
+            let enemyB = new Enemy();
+            let enemyC = new Enemy();
+            allEnemies = [enemyA, enemyB, enemyC];
+        };
+    }
 };
 
 // This listens for key presses and sends the keys to your
@@ -226,7 +235,8 @@ document.addEventListener('keyup', function(e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        13: 'enter'
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
@@ -252,7 +262,10 @@ const startMenu = function() {
 
 // GameOver alert/modal
 const gameOver = function() {
-    alert(`Game Over with a score of ${player.score}`);
+    gameOverScore.textContent = player.score;
+    gameOverModal.style.display = 'block';
+    gameOverStatus = true;
+    // The BeginPlayer handler will listen for 'Enter' and not allow character selection until tht key is pressed.
     startMenu();
 }
 
