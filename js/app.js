@@ -262,6 +262,7 @@ document.addEventListener('keyup', function(e) {
 // Clears all enemies and items
 const startMenu = function() {
     allEnemies = [];
+    speedMultiple = 1;
     allItems = [];
     // adjust counts
     counts = {
