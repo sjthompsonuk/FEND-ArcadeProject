@@ -6,6 +6,7 @@ let scoreboardLives = document.querySelector('.lives');
 let scoreboardScore = document.querySelector('.score');
 let scoreboardTopScore = document.querySelector('.top-score');
 let topScore = 0;
+let speedMultiple = 1;
 
 //Item count vriables
 let counts = {
@@ -46,7 +47,7 @@ Enemy.prototype.update = function(dt) {
     // If the Enemy runs off the page, replace with a new random Enemy
     //Beware lanes work decreasing up!!!
     if (this.x > 550) {
-        this.speed = 5 * (Math.floor(Math.random() * 3) + 1);
+        this.speed = speedMultiple * 5 * (Math.floor(Math.random() * 3) + 1);
         this.x = -100;
         this.lane = (Math.floor(Math.random() * 3)) + 1;
         this.y = this.lane * 83 - 20;
@@ -139,11 +140,14 @@ Player.prototype.update = function() {
                 counts.rock += 1;
             }
         };
-        if (this.wins % 9 == 0) {
+        if (this.wins % 10 == 0) {
             if (counts.heart < 1) {
                 addItem(Heart);
                 counts.heart = 1;
             }
+        };
+        if (this.wins % 10 == 0) {
+            speedMultiple = speedMultiple * 1.3;
         };
         scoreboardWins.textContent = this.wins;
         scoreboardScore.textContent = this.score;
