@@ -208,18 +208,12 @@ BeginPlayer.prototype.handleInput = function(direction) {
         player.sprite = nextSprite.sprite;
         player.x = nextSprite.x;
         // populate Enemies
+        let enemyA = new Enemy();
+        let enemyB = new Enemy();
+        let enemyC = new Enemy();
         allEnemies = [enemyA, enemyB, enemyC];
     };
 };
-
-
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player - this is done by startMenu below
-let enemyA = new Enemy();
-let enemyB = new Enemy();
-let enemyC = new Enemy();
-let allEnemies = [];
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
