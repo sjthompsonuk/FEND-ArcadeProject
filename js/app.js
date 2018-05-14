@@ -133,13 +133,13 @@ Player.prototype.update = function() {
                 counts.gem += 1;
             }
         };
-        if (this.wins % 2 == 0) {
+        if (this.wins % 3 == 0) {
             if (counts.rock < 3) {
                 addItem(Rock);
                 counts.rock += 1;
             }
         };
-        if (this.wins % 2 == 0) {
+        if (this.wins % 7 == 0) {
             if (counts.heart < 1) {
                 addItem(Heart);
                 counts.heart = 1;
